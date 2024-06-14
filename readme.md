@@ -79,6 +79,7 @@ Credits to [@cliffano](https://github.com/cliffano) URLs are taken from his cont
 
 | Minecraft Version | URL                                                                                           |
 | ----------------- | --------------------------------------------------------------------------------------------- |
+| 1.21              | https://piston-data.mojang.com/v1/objects/450698d1863ab5180c25d7c804ef0fe6369dd1ba/server.jar |
 | 1.20.6            | https://piston-data.mojang.com/v1/objects/145ff0858209bcfc164859ba735d4199aafa1eea/server.jar |
 | 1.20.5            | https://piston-data.mojang.com/v1/objects/79493072f65e17243fd36a699c9a96b4381feb91/server.jar |
 | 1.20.4            | https://piston-data.mojang.com/v1/objects/8dd1a28015f51b1803213892b50b7b4fc76e594d/server.jar |
