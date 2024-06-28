@@ -18,7 +18,7 @@ resource "aws_vpc" "minecraft_vpc" {
   cidr_block = "${local.minecraft_cidr_block}/16"
 
   tags = {
-    Name = "minecraft vpc"
+    Name = "${var.minecraft_server_name} minecraft vpc"
   }
 }
 
@@ -34,7 +34,7 @@ resource "aws_internet_gateway" "minecraft_internet_gateway" {
   vpc_id = aws_vpc.minecraft_vpc.id
 
   tags = {
-    Name = "minecraft internet gateway"
+    Name = "${var.minecraft_server_name} minecraft internet gateway"
   }
 
   depends_on = [aws_vpc.minecraft_vpc]
@@ -54,7 +54,7 @@ resource "aws_route_table" "minecraft_route_table" {
   }
 
   tags = {
-    Name = "minecraft route table"
+    Name = "${var.minecraft_server_name} minecraft route table"
   }
 
   depends_on = [aws_vpc.minecraft_vpc]
@@ -68,7 +68,7 @@ resource "aws_route_table_association" "minecraft_route_table_association" {
 }
 
 resource "aws_security_group" "minecraft_security_group" {
-  name   = "minecraft ports"
+  name   = "${var.minecraft_server_name} minecraft ports"
   vpc_id = aws_vpc.minecraft_vpc.id
 
   # internet protocol
@@ -127,7 +127,7 @@ resource "aws_instance" "minecraft_host" {
   }
 
   tags = {
-    Name = "minecraft host"
+    Name = "${var.minecraft_server_name} minecraft host"
   }
 
   user_data_base64 = base64encode("${templatefile("scripts/minecraft-setup.sh", {

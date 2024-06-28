@@ -1,3 +1,7 @@
+variable "minecraft_server_name" {
+  description = "Enter the Minecraft Server Name, this is to identify the overall infra of this installer"
+}
+
 variable "minecraft_version_url" {
   description = "Enter the Minecraft Version URL to be used. Check the docs to see the URLs"
   # this is 1.21
