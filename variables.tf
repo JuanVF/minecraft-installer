@@ -25,6 +25,11 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "node_exporter_ip_origin_access" {
+  description = "Node Exporter Port IP Origin Access"
+  default     = "0.0.0.0/0"
+}
+
 # Please create a tfvar with this value
 variable "aws_access_key" {
   description = "AWS Access Key"

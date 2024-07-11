@@ -53,3 +53,33 @@ printf '[Unit]\nDescription=Minecraft Server on start up\nWants=network-online.t
 sudo systemctl daemon-reload
 sudo systemctl enable minecraft.service
 sudo systemctl start minecraft.service
+
+# Install Node Exporter Agent to export server metrics
+mkdir /opt/node_exporter
+cd /opt/node_exporter
+
+wget https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-arm64.tar.gz
+tar xvfz node_exporter-1.8.1.linux-arm64.tar.gz
+
+chown -R minecraft:minecraft /opt/node_exporter/node_exporter-1.8.1.linux-arm64
+
+# Create systemd service file
+cat <<EOF | sudo tee /etc/systemd/system/node_exporter.service
+[Unit]
+Description=Node Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=minecraft
+Group=minecraft
+Type=simple
+ExecStart=/opt/node_exporter/node_exporter-1.8.1.linux-arm64/node_exporter --collector.systemd
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable node_exporter.service
+sudo systemctl start node_exporter.service

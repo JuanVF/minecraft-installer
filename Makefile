@@ -10,3 +10,6 @@ create_tfvars:
 	echo "aws_host_type         = \"$(HOST_TYPE)\"" >> $$file_path; \
 	echo "pem_file              = \"minecraft\"" >> $$file_path; \
 	echo "minecraft_server_name = \"$(NAME)\"" >> $$file_path;
+
+clean_tfvars:
+	rm $(NAME)-variables.tfvars
