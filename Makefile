@@ -9,7 +9,7 @@ create_tfvars:
 	echo "aws_host_ami_id                = \"ami-0eb01a520e67f7f20\"" >> $$file_path; \
 	echo "aws_host_type                  = \"$(HOST_TYPE)\"" >> $$file_path; \
 	echo "pem_file                       = \"minecraft\"" >> $$file_path; \
-	echo "node_exporter_ip_origin_access = \"$(NODE_IP)\"" >> $$file_path; \
+	echo "ip_origin_access               = \"$(NODE_IP)\"" >> $$file_path; \
 	echo "minecraft_server_name          = \"$(NAME)\"" >> $$file_path;
 
 clean_tfvars:

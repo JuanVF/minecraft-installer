@@ -25,8 +25,8 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "node_exporter_ip_origin_access" {
-  description = "Node Exporter Port IP Origin Access"
+variable "ip_origin_access" {
+  description = "IP Origin Access"
   default     = "0.0.0.0/0"
 }
 

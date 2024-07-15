@@ -95,12 +95,20 @@ resource "aws_security_group" "minecraft_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Allow Minecraft Query UDP Connections anywhere
+  ingress {
+    from_port   = 9200
+    to_port     = 9200
+    protocol    = "udp"
+    cidr_blocks = [var.ip_origin_access]
+  }
+
   # Allow Node Exporter Access from certain IP
   ingress {
     from_port   = 9100
     to_port     = 9100
     protocol    = "tcp"
-    cidr_blocks = [var.node_exporter_ip_origin_access]
+    cidr_blocks = [var.ip_origin_access]
   }
 
   # All outbound traffic
