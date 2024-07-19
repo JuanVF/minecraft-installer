@@ -25,12 +25,12 @@ adduser minecraft
 mkdir /opt/minecraft
 mkdir /opt/minecraft/server
 
+# Install MC Server
 cd /opt/minecraft/server
 
 wget $MINECRAFT_SERVER_URL
 
-# Install MC Server
-chown -R minecraft:minecraft /opt/minecraft/
+chown -R minecraft:minecraft /opt/minecraft/server
 
 java -Xmx1300M -Xms1300M -jar server.jar nogui
 
@@ -151,3 +151,23 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl enable node_exporter.service
 sudo systemctl start node_exporter.service
+
+# Install and enable FTP
+adduser ${ftp_user}
+echo "${ftp_user}:${ftp_password}" | sudo chpasswd
+
+sudo yum install -y vsftpd
+
+echo "chroot_local_user=YES" >> /etc/vsftpd/vsftpd.conf
+echo "allow_writeable_chroot=YES" >> /etc/vsftpd/vsftpd.conf
+echo "pasv_enable=YES" >> /etc/vsftpd/vsftpd.conf
+echo "pasv_min_port=1024" >> /etc/vsftpd/vsftpd.conf
+echo "pasv_max_port=1048" >> /etc/vsftpd/vsftpd.conf
+
+sudo usermod -d /opt/minecraft/server ${ftp_user}
+
+usermod -a -G minecraft ${ftp_user}
+
+sudo systemctl enable vsftpd
+sudo chkconfig --level 345 vsftpd on
+sudo systemctl start vsftpd

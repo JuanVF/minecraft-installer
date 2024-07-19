@@ -30,20 +30,30 @@ variable "ip_origin_access" {
   default     = "0.0.0.0/0"
 }
 
-# Please create a tfvar with this value
 variable "aws_access_key" {
   description = "AWS Access Key"
   # default     = "XXXXXXXXXXXXXXXXXXX"
 }
 
-# Please create a tfvar with this value
 variable "aws_secret_key" {
   description = "AWS Secret Key"
   # default     = "XXXXXXXXXXXXXXXXXXX"
 }
 
-# Please create a tfvar with this value
 variable "pem_file" {
   description = "The PEM file to be able to access"
   #default     = "file_name_without_pem_extension"
+}
+
+variable "disk_space" {
+  description = "Minecraft Server Disk Space"
+  default     = 20
+}
+
+variable "ftp_user" {
+  description = "FTP User"
+}
+
+variable "ftp_password" {
+  description = "FTP Password"
 }

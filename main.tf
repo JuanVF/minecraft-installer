@@ -103,10 +103,34 @@ resource "aws_security_group" "minecraft_security_group" {
     cidr_blocks = [var.ip_origin_access]
   }
 
+  # Allow Minecraft Query UDP Connections anywhere
+  ingress {
+    from_port   = 9200
+    to_port     = 9200
+    protocol    = "tcp"
+    cidr_blocks = [var.ip_origin_access]
+  }
+
   # Allow Node Exporter Access from certain IP
   ingress {
     from_port   = 9100
     to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = [var.ip_origin_access]
+  }
+
+  # Allow FTP Access from certain IP
+  ingress {
+    from_port   = 20
+    to_port     = 21
+    protocol    = "tcp"
+    cidr_blocks = [var.ip_origin_access]
+  }
+
+  # Allow FTP Pasive Access from certain IP
+  ingress {
+    from_port   = 1024
+    to_port     = 1048
     protocol    = "tcp"
     cidr_blocks = [var.ip_origin_access]
   }
@@ -138,7 +162,7 @@ resource "aws_instance" "minecraft_host" {
 
   root_block_device {
     volume_type           = "gp2"
-    volume_size           = "20"
+    volume_size           = var.disk_space
     delete_on_termination = true
   }
 
@@ -147,7 +171,9 @@ resource "aws_instance" "minecraft_host" {
   }
 
   user_data_base64 = base64encode("${templatefile("scripts/minecraft-setup.sh", {
-    version = var.minecraft_version_url
+    version      = var.minecraft_version_url,
+    ftp_user     = var.ftp_user,
+    ftp_password = var.ftp_password
   })}")
 
   depends_on = [aws_subnet.minecraft_subnet, aws_security_group.minecraft_security_group]
