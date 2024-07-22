@@ -21,6 +21,7 @@ adduser minecraft
 
 mkdir /opt/minecraft
 mkdir /opt/minecraft/server
+mkdir /opt/minecraft/server/logs
 
 # Install MC Server
 cd /opt/minecraft/server
@@ -28,6 +29,8 @@ cd /opt/minecraft/server
 wget $MINECRAFT_SERVER_URL
 
 chown -R minecraft:minecraft /opt/minecraft/server
+
+sudo chmod -R 775 /opt/minecraft/server
 
 java -Xmx${system_memory}M -Xms${system_memory}M -jar server.jar nogui
 
@@ -111,10 +114,28 @@ printf '#!/bin/bash\nkill -9 $(ps -ef | pgrep -f "java")' >> stop
 chmod +x stop
 sleep 1
 
+chown -R minecraft:minecraft /opt/minecraft/server/logs
+chmod -R 775 /opt/minecraft/server/logs
+
 # Create SystemD Script to run Minecraft server jar on reboot
 cd /etc/systemd/system/
 touch minecraft.service
-printf '[Unit]\nDescription=Minecraft Server on start up\nWants=network-online.target\n[Service]\nUser=minecraft\nWorkingDirectory=/opt/minecraft/server\nExecStart=/opt/minecraft/server/start\nStandardInput=null\n[Install]\nWantedBy=multi-user.target' >> minecraft.service
+cat <<EOF > minecraft.service
+[Unit]
+Description=Minecraft Server on start up
+Wants=network-online.target
+
+[Service]
+User=minecraft
+WorkingDirectory=/opt/minecraft/server
+ExecStart=/opt/minecraft/server/start
+StandardInput=null
+StandardOutput=append:/opt/minecraft/server/logs/latest.log
+StandardError=append:/opt/minecraft/server/logs/latest.log
+
+[Install]
+WantedBy=multi-user.target
+EOF
 sudo systemctl daemon-reload
 sudo systemctl enable minecraft.service
 sudo systemctl start minecraft.service
@@ -171,7 +192,6 @@ sudo usermod -d /opt/minecraft/server ${ftp_user}
 
 usermod -a -G minecraft ${ftp_user}
 
-# sudo chown -R ${ftp_user}:minecraft /opt/minecraft/server
 sudo chmod -R 775 /opt/minecraft/server
 
 sudo systemctl enable vsftpd
