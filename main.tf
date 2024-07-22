@@ -171,9 +171,10 @@ resource "aws_instance" "minecraft_host" {
   }
 
   user_data_base64 = base64encode("${templatefile("scripts/minecraft-setup.sh", {
-    version      = var.minecraft_version_url,
-    ftp_user     = var.ftp_user,
-    ftp_password = var.ftp_password
+    version       = var.minecraft_version_url,
+    ftp_user      = var.ftp_user,
+    ftp_password  = var.ftp_password
+    system_memory = var.system_memory
   })}")
 
   depends_on = [aws_subnet.minecraft_subnet, aws_security_group.minecraft_security_group]

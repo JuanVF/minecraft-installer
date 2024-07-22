@@ -13,6 +13,7 @@ create_tfvars:
 	echo "disk_space                     = \"${PROJECT_DISK_SPACE}\"" >> $$file_path; \
 	echo "ftp_user                       = \"${PROJECT_FTP_USER}\"" >> $$file_path; \
 	echo "ftp_password                   = \"${PROJECT_FTP_PASSWORD}\"" >> $$file_path; \
+	echo "system_memory                  = \"${SYSTEM_MEMORY}\"" >> $$file_path; \
 	echo "minecraft_server_name          = \"${PROJECT_NAME}\"" >> $$file_path;
 
 clean_tfvars:

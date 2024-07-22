@@ -50,6 +50,11 @@ variable "disk_space" {
   default     = 20
 }
 
+variable "system_memory" {
+  description = "Minecraft Server Max System Memory to use"
+  default     = 512
+}
+
 variable "ftp_user" {
   description = "FTP User"
 }

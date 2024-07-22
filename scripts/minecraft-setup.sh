@@ -4,9 +4,6 @@
 #             Take that into consideration
 # Original Script from: https://aws.amazon.com/blogs/gametech/setting-up-a-minecraft-java-server-on-amazon-ec2/
 
-# Setup Minecraft Server Version Downloads URLs
-declare -A minecraft_servers_urls
-
 # Access the URL via command-line argument for specific Minecraft version
 MINECRAFT_SERVER_URL=${version}
 
@@ -32,7 +29,7 @@ wget $MINECRAFT_SERVER_URL
 
 chown -R minecraft:minecraft /opt/minecraft/server
 
-java -Xmx1300M -Xms1300M -jar server.jar nogui
+java -Xmx${system_memory}M -Xms${system_memory}M -jar server.jar nogui
 
 sleep 50 # let's give some time for the server to start!
 
@@ -106,7 +103,7 @@ white-list=false
 EOF
 
 touch start
-printf '#!/bin/bash\njava -Xmx1300M -Xms1300M -jar server.jar nogui\n' >> start
+printf '#!/bin/bash\njava -Xmx${system_memory}M -Xms${system_memory}M -jar server.jar nogui\n' >> start
 chmod +x start
 sleep 1
 touch stop
@@ -163,10 +160,19 @@ echo "allow_writeable_chroot=YES" >> /etc/vsftpd/vsftpd.conf
 echo "pasv_enable=YES" >> /etc/vsftpd/vsftpd.conf
 echo "pasv_min_port=1024" >> /etc/vsftpd/vsftpd.conf
 echo "pasv_max_port=1048" >> /etc/vsftpd/vsftpd.conf
+echo "write_enable=YES" >> /etc/vsftpd/vsftpd.conf
+echo "local_umask=022" >> /etc/vsftpd/vsftpd.conf
+echo "anon_world_readable_only=NO" >> /etc/vsftpd/vsftpd.conf
+echo "anon_upload_enable=YES" >> /etc/vsftpd/vsftpd.conf
+echo "anon_mkdir_write_enable=YES" >> /etc/vsftpd/vsftpd.conf
+echo "anon_other_write_enable=YES" >> /etc/vsftpd/vsftpd.conf
 
 sudo usermod -d /opt/minecraft/server ${ftp_user}
 
 usermod -a -G minecraft ${ftp_user}
+
+# sudo chown -R ${ftp_user}:minecraft /opt/minecraft/server
+sudo chmod -R 775 /opt/minecraft/server
 
 sudo systemctl enable vsftpd
 sudo chkconfig --level 345 vsftpd on
